@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\user\Desktop\OpenGL\OpenGL\include;C:\Users\k9930\OpenGL\OpenGL\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\user\Desktop\OpenGL\OpenGL\lib;C:\Users\k9930\OpenGL\OpenGL\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>./include;$(IncludePath)</IncludePath>
+    <LibraryPath>./lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -120,11 +120,12 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;OpenGL32.Lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;glfw3.lib;OpenGL32.Lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Link>
@@ -146,8 +147,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="planet.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="skybox.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shader\2.2.basic_lighting.txt" />
+    <Text Include="Shader\2.2.basic_lightingfs.txt" />
+    <Text Include="Shader\3.3_fragment.txt" />
+    <Text Include="Shader\3.3_fragment_planet.txt" />
+    <Text Include="Shader\3.3_fragment_trail.txt" />
+    <Text Include="Shader\3.3_vertex.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Camera\camera.h" />
+    <ClInclude Include="include\Mesh\mesh.h" />
+    <ClInclude Include="include\Model\model.h" />
+    <ClInclude Include="include\Shader\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
