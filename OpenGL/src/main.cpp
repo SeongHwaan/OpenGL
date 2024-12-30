@@ -13,9 +13,9 @@
 #include <filesystem>
 #include <iostream>
 
-#include "player.cpp"
-#include "Game.cpp"
-#include "skybox.cpp"
+#include "header/Game.h"
+#include "header/player.h"
+#include "header/skybox.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);

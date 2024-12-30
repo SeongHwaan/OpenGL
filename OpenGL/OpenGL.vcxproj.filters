@@ -15,22 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="planet.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="skybox.cpp">
+    <ClCompile Include="src\Game.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\planet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,6 +66,18 @@
     </ClInclude>
     <ClInclude Include="include\Camera\camera.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\header\planet.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\header\player.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\header\skybox.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\header\Game.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
