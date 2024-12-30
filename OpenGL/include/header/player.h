@@ -8,7 +8,8 @@
 #include <Camera/camera.h>
 #include "header/planet.h"
 
-enum Player_Movement {
+enum Player_Movement 
+{
     front,
     back,
     L,

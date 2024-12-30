@@ -13,5 +13,5 @@ class Game
 public:
 	Game();
 
-	void checkCollision(Planet& o1, Player& o2);
+	void checkCollision(Planet& o1, Player* o2);
 };

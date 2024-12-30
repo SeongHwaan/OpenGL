@@ -152,6 +152,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\planet.cpp" />
     <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\ShaderManager.cpp" />
     <ClCompile Include="src\skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +168,7 @@
     <ClInclude Include="include\header\Game.h" />
     <ClInclude Include="include\header\planet.h" />
     <ClInclude Include="include\header\player.h" />
+    <ClInclude Include="include\header\ShaderManager.h" />
     <ClInclude Include="include\header\skybox.h" />
     <ClInclude Include="include\Mesh\mesh.h" />
     <ClInclude Include="include\Model\model.h" />

@@ -16,16 +16,20 @@
 #include "header/Game.h"
 #include "header/player.h"
 #include "header/skybox.h"
+#include "header/ShaderManager.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void processInput(GLFWwindow* window);
+void processInput(GLFWwindow* window);  
 unsigned int loadCubemap(std::vector<std::string> faces);
 
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
-Player player = Player((glm::vec3(0.0f, 100.0f, 1000.0f)), glm::vec3(0.0f, 1.0f, 0.0f));
+void SetShader(ShaderManager* shaderManager);
+void SetWorld();
+
+std::unique_ptr<Player> player = std::make_unique<Player>(glm::vec3(0.0f, 100.0f, 1000.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 Camera camera(glm::vec3(110.0f, 110.0f, 00.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 float lastX = SCR_WIDTH / 2.0f;
@@ -66,11 +70,9 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader normalShader("Shader/3.3_vertex.txt", "Shader/3.3_fragment.txt");
-    Shader lightingShader("Shader/2.2.basic_lighting.txt", "Shader/2.2.basic_lightingfs.txt");
-    Shader sunShader("Shader/2.2.basic_lighting.txt", "Shader/sun.txt");
-    Shader lineShader("Shader/3.3_vertex.txt", "Shader/3.3_fragment_trail.txt");
-    Shader skyboxShader("Shader/skybox.txt", "Shader/skyboxfs.txt");
+    //Singleton would be good
+    std::unique_ptr<ShaderManager> shaderManager = std::make_unique<ShaderManager>();
+    SetShader(shaderManager.get());
 
     Model Sun("Shader/sun/sun.obj");
     Model AlienPlanet("Shader/AlienPlanet/AlienPlanet.obj");
@@ -104,9 +106,12 @@ int main()
     Skybox skybox = Skybox();
 
     glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-    lightingShader.use();
-    lightingShader.setInt("material.diffuse", 0);
-    lightingShader.setInt("material.specular", 1);
+
+
+    auto lightingShader = shaderManager->getShader("lighting");
+    lightingShader->use();
+    lightingShader->setInt("material.diffuse", 0);
+    lightingShader->setInt("material.specular", 1);
 
     unsigned int cubemapTexture = loadCubemap(skybox.faces1);
 
@@ -121,23 +126,23 @@ int main()
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        lightingShader.use();
-        lightingShader.setVec3("light.position", lightPos);
-        lightingShader.setVec3("viewPos", camera.Position);
+        lightingShader->use();
+        lightingShader->setVec3("light.position", lightPos);
+        lightingShader->setVec3("viewPos", camera.Position);
 
         // light properties
-        lightingShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
-        lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        lightingShader->setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
+        lightingShader->setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+        lightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         // material properties
-        lightingShader.setFloat("material.shininess", 64.0f);
+        lightingShader->setFloat("material.shininess", 64.0f);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(80.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        lightingShader.setMat4("projection", projection);
-        lightingShader.setMat4("view", view);
+        lightingShader->setMat4("projection", projection);
+        lightingShader->setMat4("view", view);
 
         glm::mat4 sunModel = sun.model;
         glm::mat4 alienModel_1 = alienPlanet.model;
@@ -156,60 +161,61 @@ int main()
         moon.gravityUpdate(sun, deltaTime);
         venus.gravityUpdate(sun, deltaTime);
 
-        lightingShader.setMat4("model", alienModel_1);
-        AlienPlanet.Draw(lightingShader);
+        lightingShader->setMat4("model", alienModel_1);
+        AlienPlanet.Draw(*lightingShader);
 
-        lightingShader.setMat4("model", alienModel_2);
-        AlienPlanet2.Draw(lightingShader);
+        lightingShader->setMat4("model", alienModel_2);
+        AlienPlanet2.Draw(*lightingShader);
 
-        lightingShader.setMat4("model", alienModel_3);
-        AlienPlanet3.Draw(lightingShader);
+        lightingShader->setMat4("model", alienModel_3);
+        AlienPlanet3.Draw(*lightingShader);
 
-        lightingShader.setMat4("model", marsModel);
-        Mars.Draw(lightingShader);
+        lightingShader->setMat4("model", marsModel);
+        Mars.Draw(*lightingShader);
 
-        lightingShader.setMat4("model", mercuryModel);
-        Mercury.Draw(lightingShader);
+        lightingShader->setMat4("model", mercuryModel);
+        Mercury.Draw(*lightingShader);
 
-        lightingShader.setMat4("model", moonModel);
-        Moon.Draw(lightingShader);
+        lightingShader->setMat4("model", moonModel);
+        Moon.Draw(*lightingShader);
 
-        lightingShader.setMat4("model", venusModel);
-        Venus.Draw(lightingShader);
+        lightingShader->setMat4("model", venusModel);
+        Venus.Draw(*lightingShader);
 
 
-        lightingShader.setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
-        lightingShader.setMat4("model", sunModel);
-        Sun.Draw(lightingShader);
+        lightingShader->setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
+        lightingShader->setMat4("model", sunModel);
+        Sun.Draw(*lightingShader);
 
-        player.gravityUpdate(sun, deltaTime);
-        player.gravityUpdate(alienPlanet, deltaTime);
-        player.gravityUpdate(alienPlanet2, deltaTime);
-        player.gravityUpdate(alienPlanet3, deltaTime);
-        player.gravityUpdate(mercury, deltaTime);
-        player.gravityUpdate(mars, deltaTime);
-        player.gravityUpdate(venus, deltaTime);
+        player->gravityUpdate(sun, deltaTime);
+        player->gravityUpdate(alienPlanet, deltaTime);
+        player->gravityUpdate(alienPlanet2, deltaTime);
+        player->gravityUpdate(alienPlanet3, deltaTime);
+        player->gravityUpdate(mercury, deltaTime);
+        player->gravityUpdate(mars, deltaTime);
+        player->gravityUpdate(venus, deltaTime);
 
-        glm::mat4 playerModel = player.final;
-        lightingShader.setMat4("model", playerModel);
+        glm::mat4 playerModel = player->final;
+        lightingShader->setMat4("model", playerModel);
 
         if (!camera.getGodMode()) {
-            player.render(camera);
+            player->render(camera);
         }
         else
             camera.Position = glm::vec3(100.0f, 1000.0f, 100.0f);
 
-        Player.Draw(lightingShader);
+        Player.Draw(*lightingShader);
+
+        game.checkCollision(venus, player.get());
+        game.checkCollision(mars, player.get());
 
 
 
-        game.checkCollision(venus, player);
-        game.checkCollision(mars, player);
-
-        lineShader.use();
-        lineShader.setMat4("projection", projection);
-        lineShader.setMat4("view", view);
-        lineShader.setMat4("model", glm::mat4(1.0f));
+        auto lineShader = shaderManager->getShader("line");
+        lineShader->use();
+        lineShader->setMat4("projection", projection);
+        lineShader->setMat4("view", view);
+        lineShader->setMat4("model", glm::mat4(1.0f));
 
         alienPlanet.drawTrail(deltaTime);
         alienPlanet2.drawTrail(deltaTime);
@@ -221,10 +227,11 @@ int main()
 
         // draw skybox as last
         glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-        skyboxShader.use();
+        auto skyboxShader = shaderManager->getShader("skybox");
+        skyboxShader->use();
         view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
-        skyboxShader.setMat4("view", view);
-        skyboxShader.setMat4("projection", projection);
+        skyboxShader->setMat4("view", view);
+        skyboxShader->setMat4("projection", projection);
         // skybox cube
         glBindVertexArray(skybox.getVAO());
         glActiveTexture(GL_TEXTURE0);
@@ -260,17 +267,17 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(God, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-        player.ProcessKeyboard(front, deltaTime, camera);
+        player->ProcessKeyboard(front, deltaTime, camera);
     if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-        player.ProcessKeyboard(back, deltaTime,camera);
+        player->ProcessKeyboard(back, deltaTime,camera);
     if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-        player.ProcessKeyboard(L, deltaTime, camera);
+        player->ProcessKeyboard(L, deltaTime, camera);
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-        player.ProcessKeyboard(R, deltaTime, camera);
+        player->ProcessKeyboard(R, deltaTime, camera);
     if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-        player.ProcessKeyboard(Upp, deltaTime, camera);
+        player->ProcessKeyboard(Upp, deltaTime, camera);
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-        player.ProcessKeyboard(Down, deltaTime, camera);
+        player->ProcessKeyboard(Down, deltaTime, camera);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -327,4 +334,17 @@ unsigned int loadCubemap(std::vector<std::string> faces)
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
     return textureID;
+}
+
+void SetShader(ShaderManager* shaderManager)
+{
+    shaderManager->loadShader("normal", "Shader/3.3_vertex.txt", "Shader/3.3_fragment.txt");
+    shaderManager->loadShader("lighting", "Shader/2.2.basic_lighting.txt", "Shader/2.2.basic_lightingfs.txt");
+    shaderManager->loadShader("sun", "Shader/2.2.basic_lighting.txt", "Shader/sun.txt");
+    shaderManager->loadShader("line", "Shader/3.3_vertex.txt", "Shader/3.3_fragment_trail.txt");
+    shaderManager->loadShader("skybox", "Shader/skybox.txt", "Shader/skyboxfs.txt");
+}
+
+void SetWorld()
+{
 }
