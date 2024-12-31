@@ -14,6 +14,7 @@
 
 ## 2. 중력 구현
 - 만유인력의 법칙 사용
+
   <img src="https://github.com/user-attachments/assets/4a2dc782-4047-4eae-9e76-d19fab2536b1" height="480px" width="720px">
 
 
@@ -21,10 +22,12 @@
 - 행성의 위치 데이터를 vector나 queue 자료형에 추가
 - 위치 vertex를 저장하고 각 데이터를 GL_LINE_STRIP으로 출력
 - 그러나 LINE이 의도대로 나오지 않는 오류 발생하여 POINTS로 구현
+
   <img src="https://github.com/user-attachments/assets/251705d0-004e-42da-9352-18a608e419ae" height="480px" width="720px">
 
 ## 4. Lighting 추가
 - ambient, diffuse, specular 적용
+
 <table border="1" width="100%">
   <tr>
     <th width="50%">미적용</th>
@@ -37,11 +40,13 @@
 </table>
 
 ## 5. 카메라 구현
--마우스의 위치 변화로 Yaw와 Pitch를 계산해 Front 벡터 수정
+- 마우스의 위치 변화로 Yaw와 Pitch를 계산해 Front 벡터 수정
+
 <img src="https://github.com/user-attachments/assets/6aac761f-65b9-4772-a419-6ac51074561a" height="480px" width="720px">
 
 
 ## 시연 영상
+
 https://github.com/user-attachments/assets/bd787e34-f22e-438a-a503-69d0963d5d86
 
 
