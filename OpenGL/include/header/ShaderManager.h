@@ -5,8 +5,8 @@
 #include <memory>
 #include <Shader/shader.h>
 
-class ShaderManager {
-
+class ShaderManager 
+{
 private:
     std::map<std::string, std::shared_ptr<Shader>> shaders;
 

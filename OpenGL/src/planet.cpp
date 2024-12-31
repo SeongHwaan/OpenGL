@@ -23,16 +23,16 @@ Planet::Planet(glm::vec3 pos, float planetMass, glm::vec3 velo, float rad, float
     glBindVertexArray(0);
 }
 
-void Planet::gravityUpdate(Planet otherPlanet, float deltaTime)
+void Planet::gravityUpdate(Planet* otherPlanet, float deltaTime)
 {
     float gravityC = gravityConstant;
-    glm::vec3 otherPosition = otherPlanet.position;
+    glm::vec3 otherPosition = otherPlanet->position;
 
     float powDst = std::pow(glm::distance(position, otherPosition), 2);
     glm::vec3 norm = otherPosition - position;
     norm = glm::normalize(norm);
 
-    glm::vec3 force = norm * (gravityC * mass * otherPlanet.mass / powDst);
+    glm::vec3 force = norm * (gravityC * mass * otherPlanet->mass / powDst);
     glm::vec3 acceleration = force / mass;
     glm::vec3 newVelocity = acceleration * deltaTime;
     velocity += newVelocity;

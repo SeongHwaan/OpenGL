@@ -36,6 +36,15 @@
     <ClCompile Include="src\ShaderManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModelManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlanetManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shader\3.3_fragment.txt">
@@ -58,18 +67,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Shader\shader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Mesh\mesh.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Model\model.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Camera\camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="include\header\planet.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -83,6 +80,24 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="include\header\ShaderManager.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\header\ModelManager.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader\shader.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera\camera.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh\mesh.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model\model.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\header\PlanetManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,6 +28,6 @@ public:
 
     Planet(glm::vec3 pos, float planetMass, glm::vec3 velo, float rad, float rSpeed);
 
-    void gravityUpdate(Planet otherPlanet, float deltaTime);
+    void gravityUpdate(Planet* otherPlanet, float deltaTime);
     void drawTrail(float dt);
 };

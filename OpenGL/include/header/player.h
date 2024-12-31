@@ -42,6 +42,6 @@ public:
     Player(glm::vec3 position, glm::vec3 up);
 
     void ProcessKeyboard(Player_Movement direction, float deltaTime, Camera& camera);
-    void gravityUpdate(Planet& otherPlanet, float deltaTime);
+    void gravityUpdate(Planet* otherPlanet, float deltaTime);
     void render(Camera& camera);
 };

@@ -148,9 +148,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ModelManager.cpp" />
     <ClCompile Include="src\planet.cpp" />
+    <ClCompile Include="src\PlanetManager.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\ShaderManager.cpp" />
     <ClCompile Include="src\skybox.cpp" />
@@ -166,7 +169,9 @@
   <ItemGroup>
     <ClInclude Include="include\Camera\camera.h" />
     <ClInclude Include="include\header\Game.h" />
+    <ClInclude Include="include\header\ModelManager.h" />
     <ClInclude Include="include\header\planet.h" />
+    <ClInclude Include="include\header\PlanetManager.h" />
     <ClInclude Include="include\header\player.h" />
     <ClInclude Include="include\header\ShaderManager.h" />
     <ClInclude Include="include\header\skybox.h" />

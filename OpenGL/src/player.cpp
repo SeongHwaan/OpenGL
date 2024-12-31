@@ -53,16 +53,16 @@ void Player::ProcessKeyboard(Player_Movement direction, float deltaTime, Camera&
     acceleration = glm::vec3(0.0f);
 }
 
-void Player::gravityUpdate(Planet& otherPlanet, float deltaTime)
+void Player::gravityUpdate(Planet* otherPlanet, float deltaTime)
 {
     float gravityC = 30.0f;
-    glm::vec3 otherPosition = otherPlanet.position;
+    glm::vec3 otherPosition = otherPlanet->position;
 
     float powDst = std::pow(glm::distance(Position, otherPosition), 2);
     glm::vec3 norm = otherPosition - Position;
     norm = glm::normalize(norm);
 
-    glm::vec3 force = norm * (gravityC * mass * otherPlanet.mass / powDst);
+    glm::vec3 force = norm * (gravityC * mass * otherPlanet->mass / powDst);
     glm::vec3 acceleration = force / mass;
     glm::vec3 newVelocity = acceleration * deltaTime;
     velocity += newVelocity;
