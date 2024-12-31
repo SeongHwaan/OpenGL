@@ -52,7 +52,7 @@ void Planet::drawTrail(float dt)
     glm::vec3 newPos = position + newVel;
 
     trail.push_back(newPos);
-    if (trail.size() > 60000) {
+    if (trail.size() > 10000) {
         trail.erase(trail.begin());
     }
 

@@ -93,9 +93,7 @@ int main()
     Skybox skybox = Skybox();
 
     glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-
     auto lightingShader = shaderManager->getShader("lighting");
-    lightingShader->use();
     lightingShader->setInt("material.diffuse", 0);
     lightingShader->setInt("material.specular", 1);
 
@@ -117,7 +115,7 @@ int main()
         lightingShader->setVec3("viewPos", camera.Position);
 
         // light properties
-        lightingShader->setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
+        lightingShader->setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
         lightingShader->setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
         lightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
@@ -131,15 +129,6 @@ int main()
         lightingShader->setMat4("view", view);
 
         auto sun = planetManager->getPlanet("sun");
-        auto alienPlanet = planetManager->getPlanet("alienPlanet");
-        auto alienPlanet2 = planetManager->getPlanet("alienPlanet2");
-        auto alienPlanet3 = planetManager->getPlanet("alienPlanet3");
-        auto mars = planetManager->getPlanet("mars");
-        auto mercury = planetManager->getPlanet("mercury");
-        auto moon = planetManager->getPlanet("moon");
-        auto venus = planetManager->getPlanet("venus");
-
-        lightingShader->setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
         lightingShader->setMat4("model", sun->model);
         auto Sun = modelManager->getModel("sun");
         Sun->Draw(*lightingShader);
@@ -157,8 +146,7 @@ int main()
             player->gravityUpdate(it.get(), deltaTime);
         }
 
-        glm::mat4 playerModel = player->final;
-        lightingShader->setMat4("model", playerModel);
+        lightingShader->setMat4("model", player->finalModel);
 
         if (!camera.getGodMode()) {
             player->render(camera);
@@ -170,8 +158,8 @@ int main()
         Player->Draw(*lightingShader);
 
         //Test collision
-        game.checkCollision(venus.get(), player.get());
-        game.checkCollision(mars.get(), player.get());
+        //game.checkCollision(venus.get(), player.get());
+        //game.checkCollision(mars.get(), player.get());
 
         auto lineShader = shaderManager->getShader("line");
         lineShader->use();

@@ -22,7 +22,7 @@ class Player
 {
 public:
     glm::mat4 model;
-    glm::mat4 final;
+    glm::mat4 finalModel;
 
     glm::vec3 Position;
     glm::vec3 Front;
