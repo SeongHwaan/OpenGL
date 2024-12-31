@@ -18,6 +18,7 @@ public:
 	glm::mat4 model;
 	glm::vec3 position;
 	glm::vec3 velocity;
+    std::string planetName;
 
     float mass;
     float radius;
@@ -26,7 +27,7 @@ public:
     GLuint vbo, vao;
     std::vector<glm::vec3> trail;
 
-    Planet(glm::vec3 pos, float planetMass, glm::vec3 velo, float rad, float rSpeed);
+    Planet(std::string name, glm::vec3 pos, float planetMass, glm::vec3 velo, float rad, float rSpeed);
 
     void gravityUpdate(Planet* otherPlanet, float deltaTime);
     void drawTrail(float dt);

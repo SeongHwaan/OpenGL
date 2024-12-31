@@ -1,7 +1,8 @@
 #include "header/planet.h"
 
-Planet::Planet(glm::vec3 pos, float planetMass, glm::vec3 velo, float rad, float rSpeed)
+Planet::Planet(std::string name, glm::vec3 pos, float planetMass, glm::vec3 velo, float rad, float rSpeed)
 {
+    planetName = name;
     position = pos;
     mass = planetMass;
     velocity = velo;
@@ -31,7 +32,7 @@ void Planet::gravityUpdate(Planet* otherPlanet, float deltaTime)
     float powDst = std::pow(glm::distance(position, otherPosition), 2);
     glm::vec3 norm = otherPosition - position;
     norm = glm::normalize(norm);
-
+    //if powDst == 0, error occur
     glm::vec3 force = norm * (gravityC * mass * otherPlanet->mass / powDst);
     glm::vec3 acceleration = force / mass;
     glm::vec3 newVelocity = acceleration * deltaTime;

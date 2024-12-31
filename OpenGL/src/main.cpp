@@ -83,11 +83,16 @@ int main()
     std::unique_ptr<PlanetManager> planetManager = std::make_unique<PlanetManager>();
     SetPlanet(planetManager.get());
 
+    std::vector<std::string> planetNames = {
+    "alienPlanet", "alienPlanet2", "alienPlanet3",
+    "mars", "mercury", "moon", "venus"};
+
+    std::vector<std::shared_ptr<Planet>> planets = planetManager->getPlanetVector(planetNames);
+
     Game game = Game();
     Skybox skybox = Skybox();
 
     glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-
 
     auto lightingShader = shaderManager->getShader("lighting");
     lightingShader->use();
@@ -134,55 +139,23 @@ int main()
         auto moon = planetManager->getPlanet("moon");
         auto venus = planetManager->getPlanet("venus");
 
-        alienPlanet->gravityUpdate(sun.get(), deltaTime);
-        alienPlanet2->gravityUpdate(sun.get(), deltaTime);
-        alienPlanet3->gravityUpdate(sun.get(), deltaTime);
-        mars->gravityUpdate(sun.get(), deltaTime);
-        mercury->gravityUpdate(sun.get(), deltaTime);
-        moon->gravityUpdate(sun.get(), deltaTime);
-        venus->gravityUpdate(sun.get(), deltaTime);
-
-        lightingShader->setMat4("model", alienPlanet->model);
-        auto AlienPlanet = modelManager->getModel("AlienPlanet");
-        AlienPlanet->Draw(*lightingShader);
-
-        lightingShader->setMat4("model", alienPlanet2->model);
-        auto AlienPlanet2 = modelManager->getModel("AlienPlanet2");
-        AlienPlanet2->Draw(*lightingShader);
-
-        lightingShader->setMat4("model", alienPlanet3->model);
-        auto AlienPlanet3 = modelManager->getModel("AlienPlanet3");
-        AlienPlanet3->Draw(*lightingShader);
-
-        lightingShader->setMat4("model", mars->model);
-        auto Mars = modelManager->getModel("Mars");
-        Mars->Draw(*lightingShader);
-
-        lightingShader->setMat4("model", mercury->model);
-        auto Mercury = modelManager->getModel("Mercury");
-        Mercury->Draw(*lightingShader);
-
-        lightingShader->setMat4("model", moon->model);
-        auto Moon = modelManager->getModel("Moon");
-        Moon->Draw(*lightingShader);
-
-        lightingShader->setMat4("model", venus->model);
-        auto Venus = modelManager->getModel("Venus");
-        Venus->Draw(*lightingShader);
-
-
         lightingShader->setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
         lightingShader->setMat4("model", sun->model);
-        auto Sun = modelManager->getModel("Sun");
+        auto Sun = modelManager->getModel("sun");
         Sun->Draw(*lightingShader);
 
+        for (auto& it : planets) {
+            it->gravityUpdate(sun.get(), deltaTime);
+            lightingShader->setMat4("model", it->model);
+            auto PlanetModel = modelManager->getModel(it->planetName);
+            PlanetModel->Draw(*lightingShader);
+        }
+
         player->gravityUpdate(sun.get(), deltaTime);
-        player->gravityUpdate(alienPlanet.get(), deltaTime);
-        player->gravityUpdate(alienPlanet2.get(), deltaTime);
-        player->gravityUpdate(alienPlanet3.get(), deltaTime);
-        player->gravityUpdate(mercury.get(), deltaTime);
-        player->gravityUpdate(mars.get(), deltaTime);
-        player->gravityUpdate(venus.get(), deltaTime);
+
+        for (auto& it : planets) {
+            player->gravityUpdate(it.get(), deltaTime);
+        }
 
         glm::mat4 playerModel = player->final;
         lightingShader->setMat4("model", playerModel);
@@ -193,13 +166,12 @@ int main()
         else
             camera.Position = glm::vec3(100.0f, 1000.0f, 100.0f);
 
-        auto Player = modelManager->getModel("Player");
+        auto Player = modelManager->getModel("player");
         Player->Draw(*lightingShader);
 
+        //Test collision
         game.checkCollision(venus.get(), player.get());
         game.checkCollision(mars.get(), player.get());
-
-
 
         auto lineShader = shaderManager->getShader("line");
         lineShader->use();
@@ -207,13 +179,10 @@ int main()
         lineShader->setMat4("view", view);
         lineShader->setMat4("model", glm::mat4(1.0f));
 
-        alienPlanet->drawTrail(deltaTime);
-        alienPlanet2->drawTrail(deltaTime);
-        alienPlanet3->drawTrail(deltaTime);
-        mercury->drawTrail(deltaTime);
-        mars->drawTrail(deltaTime);
-        moon->drawTrail(deltaTime);
-        venus->drawTrail(deltaTime);
+        for (auto& it : planets)
+        {
+            it->drawTrail(deltaTime);
+        }
 
         // draw skybox as last
         glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
@@ -338,16 +307,16 @@ void SetShader(ShaderManager* shaderManager)
 
 void SetModel(ModelManager* modelManager)
 {
-    modelManager->loadModel("Sun","Shader/sun/sun.obj");
-    modelManager->loadModel("AlienPlanet", "Shader/AlienPlanet/AlienPlanet.obj");
-    modelManager->loadModel("AlienPlanet2", "Shader/AlienPlanet/AlienPlanet.obj");
-    modelManager->loadModel("AlienPlanet3", "Shader/AlienPlanet3/AlienPlanet.obj");
-    modelManager->loadModel("Mars", "Shader/mars/Mars 2K.obj");
-    modelManager->loadModel("Mercury", "Shader/mercury/Mercury 1K.obj");
-    modelManager->loadModel("Moon", "Shader/moon/Moon 2K.obj");
-    modelManager->loadModel("Venus", "Shader/venus/Venus_1K.obj");
+    modelManager->loadModel("sun","Shader/sun/sun.obj");
+    modelManager->loadModel("alienPlanet", "Shader/AlienPlanet/AlienPlanet.obj");
+    modelManager->loadModel("alienPlanet2", "Shader/AlienPlanet/AlienPlanet.obj");
+    modelManager->loadModel("alienPlanet3", "Shader/AlienPlanet3/AlienPlanet.obj");
+    modelManager->loadModel("mars", "Shader/mars/Mars 2K.obj");
+    modelManager->loadModel("mercury", "Shader/mercury/Mercury 1K.obj");
+    modelManager->loadModel("moon", "Shader/moon/Moon 2K.obj");
+    modelManager->loadModel("venus", "Shader/venus/Venus_1K.obj");
 
-    modelManager->loadModel("Player", "Shader/ufo/ufo/ufo.obj");
+    modelManager->loadModel("player", "Shader/ufo/ufo/ufo.obj");
 }
 
 void SetPlanet(PlanetManager* planetManager)
